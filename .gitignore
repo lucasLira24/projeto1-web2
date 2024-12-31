@@ -1,0 +1,56 @@
+# Node modules
+/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Diretórios de build
+/dist
+/build
+/coverage
+
+# Dependências do NPM (pode ser reconstruído)
+package-lock.json
+yarn.lock
+
+# Arquivos de configuração do IDE
+.vscode/
+.idea/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos gerados por sistemas operacionais
+*.swp
+*.swo
+
+# Diretórios e arquivos temporários
+tmp/
+temp/
+
+# Arquivos de ambientes
+.env*
+
+# Arquivos de configuração do ambiente
+*.tgz
+
+# Arquivos específicos de testes
+/coverage/
+
+# Arquivos de caches de ferramentas
+.cache/
+
+# Arquivos gerados por ferramentas de bundling
+/.next
+/.nuxt
+/dist
+
+# Arquivos e pastas de artefatos de build para Docker, CI, etc.
+docker-compose.override.yml
+
+gerarSenha.js
