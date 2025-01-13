@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 // Conexão com o banco de dados
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('MongoDB conectado'))
     .catch((erro) => console.log(erro));
 

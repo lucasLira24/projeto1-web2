@@ -7,10 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Conexão com o MongoDB
-const conexao = mongoose.createConnection(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const conexao = mongoose.createConnection(process.env.MONGO_URL, {});
 
 let gfs;
 conexao.once('open', () => {
