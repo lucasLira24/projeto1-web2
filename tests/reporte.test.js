@@ -24,7 +24,6 @@ describe("GET /api/laboratorio/relatorio", () => {
     try {
       await axios.get(url);
     } catch (erro) {
-      //console.log("Erro na requisição:", erro.message);
       expect(erro.response.status).toBe(401);
       expect(erro.response.data).toHaveProperty(
         "message",

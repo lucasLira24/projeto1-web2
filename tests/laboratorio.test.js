@@ -8,16 +8,16 @@ describe("POST /api/laboratorio/novo", () => {
       const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzcwMjUxNmU4YWI5ZTFlMDllZmI3NzciLCJpYXQiOjE3MzU0MTEyODF9.5k-sY3NZI7QuejN-uaedRC_kXNLNQNQQpQhCOYT6eAk'; // Substitua pelo seu token
 
       const form = new FormData();
-      form.append('nome', 'Laboratório E');
-      form.append('descricao', 'Laboratório de Fisica');
-      form.append('capacidade', 40);
-      form.append('foto', fs.createReadStream('imgs/vikings-history-reprod.jpg')); // Ajuste o caminho da imagem
+      form.append('nome', 'Laboratório Geologia');
+      form.append('descricao', 'Laboratório para analise de residos geologicos');
+      form.append('capacidade', 30);
+      form.append('foto', fs.createReadStream('imgs/vikings-history-reprod.jpg')); 
 
       try {
         const resposta = await axios.post(url, form, {
           headers: {
             'Authorization': `Bearer ${token}`,
-            ...form.getHeaders() // Inclui os headers do form-data
+            ...form.getHeaders()
           }
         });
 

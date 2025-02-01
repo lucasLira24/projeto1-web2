@@ -2,17 +2,17 @@ const axios = require("axios");
 
 describe("POST /api/logar", () => {
   it("deve logar um usuário e retornar um token", async () => {
-    const url = "http://localhost:5000/api/logar"; // Certifique-se de que a URL está correta
+    const url = "http://localhost:5000/api/logar"; 
     try {
       const resposta = await axios.post(url, {
         email: "teste@teste.com",
-        senha: "minhaSenha123", // Usar 'password' em vez de 'senha'
+        senha: "minhaSenha123", 
       });
 
       expect(resposta.status).toBe(200);
-      expect(resposta.data).toHaveProperty("token"); // Ajustar verificação da resposta
+      expect(resposta.data).toHaveProperty("token"); 
     } catch (erro) {
-      console.log("Erro na requisição:", erro.message); // Log de erro simplificado
+      console.log("Erro na requisição:", erro.message); 
     }
   });
 
