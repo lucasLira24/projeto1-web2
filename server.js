@@ -12,7 +12,7 @@ const app = express();
 // Middlewares 
 app.use(express.json());
 app.use(cors());
-
+app.use(express.static('public'))
 // Conexão com o banco de dados
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('MongoDB conectado'))
