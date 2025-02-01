@@ -68,20 +68,7 @@ exports.gerarRelatorio = async (req, res) => {
     const caminhoArquivo = path.join('/tmp', 'relatorio_laboratorios.pdf');
     const writeStream = fs.createWriteStream(caminhoArquivo);
 
-    doc.pipe(writeStream);
     let yOffset = 20;
-    let contadorLaboratorios = 0;
-
-    writeStream.on('finish', () => {
-      // Após gerar o PDF, faz o download do arquivo
-      res.download(caminhoArquivo, "relatorio_laboratorios.pdf", (err) => {
-        if (err) {
-          res.status(500).json({ message: "Erro ao baixar o arquivo.", error: err });
-        } else {
-          fs.unlinkSync(caminhoArquivo); // Remove o arquivo temporário
-        }
-      });
-    });
 
     // Loop para percorrer todos os laboratórios e gerar o conteúdo do PDF
     for (let laboratorio of laboratorios) {
@@ -103,14 +90,23 @@ exports.gerarRelatorio = async (req, res) => {
         yOffset += 20;
       }
 
-      contadorLaboratorios++;
-
       if (yOffset > 700) {
         doc.addPage();
         yOffset = 20; // Reseta o yOffset para o topo da página
       }
     }
-
+    writeStream.on('finish', () => {
+      // Após gerar o PDF, faz o download do arquivo
+      res.download(caminhoArquivo, "relatorio_laboratorios.pdf", (err) => {
+        if (err) {
+          res.status(500).json({ message: "Erro ao baixar o arquivo.", error: err });
+        } else {
+          fs.unlinkSync(caminhoArquivo); // Remove o arquivo temporário
+        }foto
+      });
+    });
+    
+    doc.pipe(writeStream);
     doc.end();
   } catch (erro) {
     console.error("Erro ao gerar o relatório PDF:", erro);

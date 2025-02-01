@@ -54,3 +54,5 @@ temp/
 docker-compose.override.yml
 
 gerarSenha.js
+
+*.pdf
