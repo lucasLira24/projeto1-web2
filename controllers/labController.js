@@ -5,6 +5,16 @@ const { Readable } = require('stream');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const http = require('http')
+const app = require('../server')
+const socketIo = require('socket.io');
+
+const server = http.createServer(app)
+
+// Configuração do socket.io
+const io = socketIo(server);
+
+let dadosClima = []
 
 // Conexão com o MongoDB
 const conexao = mongoose.createConnection(process.env.MONGO_URL, {});
@@ -114,6 +124,45 @@ exports.gerarRelatorio = async (req, res) => {
   }
 };
 
+exports.videoTutorial = (req, res) => {
+  const videoPath = path.join(__dirname, '..', 'videos', 'teste1.mp4'); // Caminho do vídeo
+
+  const stat = fs.statSync(videoPath);
+  const fileSize = stat.size;
+  const range = req.headers.range;
+
+  if (range) {
+    const parts = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+    res.writeHead(206, {
+      "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": (end - start) + 1,
+      "Content-Type": "video/mp4",
+    });
+
+    const videoStream = fs.createReadStream(videoPath, { start, end });
+    videoStream.pipe(res);
+  } else {
+    res.writeHead(200, {
+      "Content-Length": fileSize,
+      "Content-Type": "video/mp4",
+    });
+    fs.createReadStream(videoPath).pipe(res);
+  }
+};
+
+exports.temperatura = (req, res) => {
+
+  dadosClima.push(req.query.temp)
+  res.json({mensagem: 'Temperatura gravada'})
+};
+
+exports.temperaturaAtual = (req, res) => {
+  res.json({dados: dadosClima})
+};
 // Função para adicionar imagem ao PDF
 async function adicionarImagemAoPDF(doc, fotoId, yOffset) {
   return new Promise((resolve, reject) => {
