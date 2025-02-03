@@ -8,6 +8,9 @@ const diaSemanaMiddleware = require('../middlewares/diaSemanaMiddleware.js').dia
 
 router.post('/laboratorio/novo', autenticacaoMiddleware, diaSemanaMiddleware, upload.single('foto'), labController.criarLaboratorio);
 router.get('/laboratorio/relatorio', autenticacaoMiddleware, diaSemanaMiddleware, labController.gerarRelatorio);
+router.get('/videoTutorial', labController.videoTutorial)
+router.get('/temperatura', labController.temperatura)
+router.get('/temperaturaAtual', labController.temperaturaAtual)
 
 module.exports = router;
 

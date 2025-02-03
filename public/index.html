@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatório do clima</title>
+</head>
+
+<body>
+    <h1>Observatório do clima</h1>
+    <button onclick="listar()">Listar climas</button>
+    <div id="resp"></div>
+    <script>
+        async function listar() {
+            const url = "https://projeto1-web2.vercel.app/api/temperaturaAtual"
+            const resposta = await fetch(url)
+            const respFormatada = await resposta.json()
+            console.log(respFormatada)
+            if (respFormatada.dados.length) {            
+                respFormatada.dados.forEach(function (clima) {
+                    document.getElementById("resp").innerHTML += '<button>' + clima + '</button>'
+                })
+            } else {
+                document.getElementById("resp").innerHTML += '<p>Temperaturas não encontradas</p>'
+            }
+        }
+    </script>
+</body>
+
+</html>
