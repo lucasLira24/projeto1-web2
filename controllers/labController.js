@@ -5,14 +5,6 @@ const { Readable } = require('stream');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
-const http = require('http')
-const app = require('../server')
-const socketIo = require('socket.io');
-
-const server = http.createServer(app)
-
-// Configuração do socket.io
-const io = socketIo(server);
 
 let dadosClima = []
 
@@ -186,3 +178,33 @@ async function adicionarImagemAoPDF(doc, fotoId, yOffset) {
     });
   });
 }
+
+let io;
+
+exports.setIo = (socketIo) => {
+  io = socketIo;
+};
+
+exports.bloquearLaboratorio = async (req, res) => {
+  const { lab } = req.params;
+
+  if (!lab) {
+    return res.status(400).json({ message: 'Nome do laboratório é obrigatório' });
+  }
+
+ try {
+    const laboratorio = await Laboratorio.findOne({ nome: lab });
+
+    if (!laboratorio) {
+      return res.status(404).json({ message: `Laboratório "${lab}" não encontrado.` });
+    }
+
+    io.emit(`bloquear(${lab})`, { message: `O ${lab} foi bloqueado!` });
+
+    res.status(200).json({ message: `Bloqueio do ${lab} notificado.` });
+  } catch (error) {
+    console.error("Erro ao bloquear laboratório:", error);
+    res.status(500).json({ message: "Erro interno do servidor ao bloquear laboratório." });
+  }
+
+};

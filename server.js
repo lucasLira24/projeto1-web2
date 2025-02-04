@@ -3,11 +3,17 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 dotenv.config();
+const http = require('http');
+const { Server } = require('socket.io');
 
 const rotasAutenticacao = require('./routes/usuarioRotas');
 const rotasLaboratorio = require('./routes/labRotas');
+const labController = require('./controllers/labController');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: '*', }, });
+labController.setIo(io);
 
 // Middlewares 
 app.use(express.json());
@@ -21,5 +27,7 @@ mongoose.connect(process.env.MONGO_URL)
 app.use('/api', rotasAutenticacao);
 app.use('/api', rotasLaboratorio);
 
+module.exports = { app, server };
+
 const PORTA = 5000;
-app.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
+server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));

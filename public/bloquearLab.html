@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificação de Laboratório</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Notificação de Bloqueio de Laboratórios</h1>
+    <div id="mensagem"></div>
+    <script>
+        const socket = io();
+        socket.onAny((event, data) => {
+            document.getElementById('mensagem').innerHTML = `<p>${data.message}</p>`;
+        });
+    </script>
+</body>
+</html>
