@@ -8,12 +8,12 @@ const diaSemanaMiddleware = require('../middlewares/diaSemanaMiddleware.js').dia
 
 router.post('/laboratorio/novo', autenticacaoMiddleware, diaSemanaMiddleware, upload.single('foto'), labController.criarLaboratorio);
 router.get('/laboratorio/relatorio', autenticacaoMiddleware, diaSemanaMiddleware, labController.gerarRelatorio);
-router.get('/videoTutorial', diaSemanaMiddleware, labController.videoTutorial)
-router.get('/temperatura', diaSemanaMiddleware, labController.temperatura)
-router.get('/temperaturaAtual', diaSemanaMiddleware, labController.temperaturaAtual)
-router.post('/bloquear/:lab', autenticacaoMiddleware, labController.bloquearLaboratorio);
-router.get('/obterStatusLuz', diaSemanaMiddleware, labController.temperatura)
-router.get('/ligarLuz', diaSemanaMiddleware, labController.temperaturaAtual)
+router.get('/videoTutorial', labController.videoTutorial)
+router.get('/temperatura', labController.temperatura)
+router.get('/temperaturaAtual', labController.temperaturaAtual)
+router.post('/bloquear/:lab', labController.bloquearLaboratorio);
+router.get('/obterStatusLuz', labController.obterStatusLuz)
+router.get('/ligarLuz', labController.ligarLuz)
 
 module.exports = router;
 
