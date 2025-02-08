@@ -222,10 +222,10 @@ exports.temperaturaAtual = (req, res) => {
 };
 
 exports.obterStatusLuz = (req, res) => {
-  statusLuz = "Ligado";
-  res.json({ mensagem: "Led Ligado com sucesso" });
+  res.send(statusLuz);
 };
 
 exports.ligarLuz = (req, res) => {
-  res.send(statusLuz);
+  statusLuz = "Ligado";
+  res.json({ mensagem: "Led Ligado com sucesso" });
 };
