@@ -12,8 +12,7 @@ const labController = require('./controllers/labController');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
-
+const io = new Server(server, { cors: { origin: '*', }, });
 labController.setIo(io);
 
 // Middlewares 
@@ -38,12 +37,11 @@ io.on('connection', (socket) => {
 app.use('/api', rotasAutenticacao);
 app.use('/api', rotasLaboratorio);
 
-// Definindo a porta para o servidor
 const PORTA = 5000;
-server.listen(PORTA, () => {
-    console.log(`Servidor rodando na porta ${PORTA}`);
-});
+
+if (!server.listening) {
+    server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
+}
 
 // Exportando o servidor corretamente
 module.exports = server;
-
