@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
 const http = require("http");
-//const { Server } = require("socket.io");
+
 
 const rotasAutenticacao = require("./routes/usuarioRotas");
 const rotasLaboratorio = require("./routes/labRotas");
@@ -41,6 +41,3 @@ app.use("/api", rotasLaboratorio);
 const PORTA = 5000;
 
 server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
-
-// // Exportando o servidor corretamente
-// module.exports = server;
