@@ -11,7 +11,9 @@ router.get('/laboratorio/relatorio', autenticacaoMiddleware, diaSemanaMiddleware
 router.get('/videoTutorial', labController.videoTutorial)
 router.get('/temperatura', labController.temperatura)
 router.get('/temperaturaAtual', labController.temperaturaAtual)
-router.post('/bloquear/:lab', autenticacaoMiddleware, labController.bloquearLaboratorio);
+router.post('/bloquear/:lab', labController.bloquearLaboratorio);
+router.get('/obterStatusLuz', labController.obterStatusLuz)
+router.get('/ligarLuz', labController.ligarLuz)
 
 module.exports = router;
 

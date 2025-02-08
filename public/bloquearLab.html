@@ -11,8 +11,8 @@
     <div id="mensagem"></div>
     <script>
         const socket = io();
-        socket.onAny((event, data) => {
-            document.getElementById('mensagem').innerHTML = `<p>${data.message}</p>`;
+        socket.on('bloquearLab', (data) => {
+            document.getElementById('mensagem').innerHTML = `<p>${data}</p>`;
         });
     </script>
 </body>

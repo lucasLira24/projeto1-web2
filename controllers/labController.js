@@ -1,22 +1,23 @@
-const Laboratorio = require('../models/Lab'); // Modelo de laboratório
-const mongoose = require('mongoose');
-const { GridFSBucket } = require('mongodb');
-const { Readable } = require('stream');
-const PDFDocument = require('pdfkit');
-const fs = require('fs');
-const path = require('path');
-
-let dadosClima = []
+const Laboratorio = require("../models/Lab"); // Modelo de laboratório
+const mongoose = require("mongoose");
+const { GridFSBucket } = require("mongodb");
+const { Readable } = require("stream");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
+const socket = require("socket.io");
+let dadosClima = [];
+var statusLuz = "Desligado";
 
 // Conexão com o MongoDB
 const conexao = mongoose.createConnection(process.env.MONGO_URL, {});
 
 let gfs;
-conexao.once('open', () => {
+conexao.once("open", () => {
   console.log("Conexão estabelecida com sucesso");
   // Inicializa o GridFSBucket
   gfs = new GridFSBucket(conexao.db, {
-    bucketName: 'Lab' // Define o nome do bucket onde os arquivos serão armazenados
+    bucketName: "Lab", // Define o nome do bucket onde os arquivos serão armazenados
   });
 });
 
@@ -26,7 +27,7 @@ exports.criarLaboratorio = async (req, res) => {
   const { originalname, mimetype, buffer } = file;
 
   if (!nome) {
-    return res.status(422).json({ message: 'O campo de nome é obrigatório' });
+    return res.status(422).json({ message: "O campo de nome é obrigatório" });
   }
 
   try {
@@ -40,7 +41,8 @@ exports.criarLaboratorio = async (req, res) => {
     readBuffer.push(null);
 
     const arquivoId = await new Promise((resolve, reject) => {
-      readBuffer.pipe(uploadStream)
+      readBuffer
+        .pipe(uploadStream)
         .on("finish", () => resolve(uploadStream.id))
         .on("error", (err) => reject(err));
     });
@@ -56,8 +58,10 @@ exports.criarLaboratorio = async (req, res) => {
     const laboratorioSalvo = await novoLaboratorio.save();
     res.status(201).json(laboratorioSalvo); // Responde com o laboratório criado
   } catch (err) {
-    console.error('Erro ao salvar o laboratório:', err);
-    res.status(500).json({ message: 'Erro ao salvar o laboratório', error: err });
+    console.error("Erro ao salvar o laboratório:", err);
+    res
+      .status(500)
+      .json({ message: "Erro ao salvar o laboratório", error: err });
   }
 };
 
@@ -67,7 +71,7 @@ exports.gerarRelatorio = async (req, res) => {
 
     const doc = new PDFDocument();
     // Mudar o diretório para um local temporário (exemplo: '/tmp/relatorio_laboratorios.pdf')
-    const caminhoArquivo = path.join('/tmp', 'relatorio_laboratorios.pdf');
+    const caminhoArquivo = path.join("/tmp", "relatorio_laboratorios.pdf");
     const writeStream = fs.createWriteStream(caminhoArquivo);
 
     let yOffset = 20;
@@ -97,27 +101,32 @@ exports.gerarRelatorio = async (req, res) => {
         yOffset = 20; // Reseta o yOffset para o topo da página
       }
     }
-    writeStream.on('finish', () => {
+    writeStream.on("finish", () => {
       // Após gerar o PDF, faz o download do arquivo
       res.download(caminhoArquivo, "relatorio_laboratorios.pdf", (err) => {
         if (err) {
-          res.status(500).json({ message: "Erro ao baixar o arquivo.", error: err });
+          res
+            .status(500)
+            .json({ message: "Erro ao baixar o arquivo.", error: err });
         } else {
           fs.unlinkSync(caminhoArquivo); // Remove o arquivo temporário
-        }foto
+        }
+        foto;
       });
     });
-    
+
     doc.pipe(writeStream);
     doc.end();
   } catch (erro) {
     console.error("Erro ao gerar o relatório PDF:", erro);
-    res.status(500).json({ message: "Erro no servidor ao gerar o relatório", error: erro });
+    res
+      .status(500)
+      .json({ message: "Erro no servidor ao gerar o relatório", error: erro });
   }
 };
 
 exports.videoTutorial = (req, res) => {
-  const videoPath = path.join(__dirname, '..', 'videos', 'teste1.mp4'); // Caminho do vídeo
+  const videoPath = path.join(__dirname, "..", "videos", "teste1.mp4"); // Caminho do vídeo
 
   const stat = fs.statSync(videoPath);
   const fileSize = stat.size;
@@ -131,7 +140,7 @@ exports.videoTutorial = (req, res) => {
     res.writeHead(206, {
       "Content-Range": `bytes ${start}-${end}/${fileSize}`,
       "Accept-Ranges": "bytes",
-      "Content-Length": (end - start) + 1,
+      "Content-Length": end - start + 1,
       "Content-Type": "video/mp4",
     });
 
@@ -144,16 +153,6 @@ exports.videoTutorial = (req, res) => {
     });
     fs.createReadStream(videoPath).pipe(res);
   }
-};
-
-exports.temperatura = (req, res) => {
-
-  dadosClima.push(req.query.temp)
-  res.json({mensagem: 'Temperatura gravada'})
-};
-
-exports.temperaturaAtual = (req, res) => {
-  res.json({dados: dadosClima})
 };
 // Função para adicionar imagem ao PDF
 async function adicionarImagemAoPDF(doc, fotoId, yOffset) {
@@ -189,22 +188,44 @@ exports.bloquearLaboratorio = async (req, res) => {
   const { lab } = req.params;
 
   if (!lab) {
-    return res.status(400).json({ message: 'Nome do laboratório é obrigatório' });
+    return res
+      .status(400)
+      .json({ message: "Nome do laboratório é obrigatório" });
   }
 
- try {
+  try {
     const laboratorio = await Laboratorio.findOne({ nome: lab });
 
     if (!laboratorio) {
-      return res.status(404).json({ message: `Laboratório "${lab}" não encontrado.` });
+      return res
+        .status(404)
+        .json({ message: `Laboratório "${lab}" não encontrado.` });
     }
 
-    io.emit(`bloquear(${lab})`, { message: `O ${lab} foi bloqueado!` });
-
+    io.emit("bloquearLab", `Laboratório ${lab} bloqueado`);
     res.status(200).json({ message: `Bloqueio do ${lab} notificado.` });
   } catch (error) {
     console.error("Erro ao bloquear laboratório:", error);
-    res.status(500).json({ message: "Erro interno do servidor ao bloquear laboratório." });
+    res
+      .status(500)
+      .json({ message: "Erro interno do servidor ao bloquear laboratório." });
   }
+};
 
+exports.temperatura = (req, res) => {
+  dadosClima.push(req.query.temp);
+  res.json({ mensagem: "Temperatura gravada" });
+};
+
+exports.temperaturaAtual = (req, res) => {
+  res.json({ dados: dadosClima });
+};
+
+exports.obterStatusLuz = (req, res) => {
+  statusLuz = "Ligado";
+  res.json({ mensagem: "Led Ligado com sucesso" });
+};
+
+exports.ligarLuz = (req, res) => {
+  res.send(statusLuz);
 };
