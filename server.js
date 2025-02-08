@@ -1,47 +1,46 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
 dotenv.config();
-const http = require('http');
-const { Server } = require('socket.io');
+const http = require("http");
+const { Server } = require("socket.io");
 
-const rotasAutenticacao = require('./routes/usuarioRotas');
-const rotasLaboratorio = require('./routes/labRotas');
-const labController = require('./controllers/labController');
+const rotasAutenticacao = require("./routes/usuarioRotas");
+const rotasLaboratorio = require("./routes/labRotas");
+const labController = require("./controllers/labController");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*', }, });
+const io = require("socket.io")(server);
 labController.setIo(io);
 
-// Middlewares 
+// Middlewares
 app.use(express.json());
-app.use(cors({ origin: '*' }));
-app.use(express.static('public'));
+app.use(cors({ origin: "*" }));
+app.use(express.static("public"));
 
 // Conexão com o banco de dados
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => console.log('MongoDB conectado'))
-    .catch((erro) => console.log(erro));
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB conectado"))
+  .catch((erro) => console.log(erro));
 
 // Configuração do Socket.IO
-io.on('connection', (socket) => {
-    console.log('Cliente conectado');
-    socket.on('bloquearLab', (data) => {
-        io.emit('bloquearLab', data);
-    });
+io.on("connection", (socket) => {
+  console.log("Cliente conectado");
+  socket.on("bloquearLab", (data) => {
+    io.emit("bloquearLab", data);
+  });
 });
 
 // Definição das rotas
-app.use('/api', rotasAutenticacao);
-app.use('/api', rotasLaboratorio);
+app.use("/api", rotasAutenticacao);
+app.use("/api", rotasLaboratorio);
 
 const PORTA = 5000;
 
-if (!server.listening) {
-    server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
-}
+server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
 
 // Exportando o servidor corretamente
 module.exports = server;
