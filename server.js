@@ -40,4 +40,4 @@ app.use('/api', rotasLaboratorio);
 const PORTA = 5000;
 server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
 
-module.exports = { server };
+module.exports = server ;
