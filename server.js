@@ -17,17 +17,27 @@ labController.setIo(io);
 
 // Middlewares 
 app.use(express.json());
-app.use(cors({origin: '*'}));
-app.use(express.static('public'))
+app.use(cors({ origin: '*' }));
+app.use(express.static('public'));
+
 // Conexão com o banco de dados
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('MongoDB conectado'))
     .catch((erro) => console.log(erro));
 
+// Configuração do Socket.IO
+io.on('connection', (socket) => {
+    console.log('Cliente conectado');
+    socket.on('bloquearLab', (data) => {
+        io.emit('bloquearLab', data);
+    });
+});
+
+// Definição das rotas
 app.use('/api', rotasAutenticacao);
 app.use('/api', rotasLaboratorio);
 
-module.exports = { app, server };
-
 const PORTA = 5000;
 server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
+
+module.exports = { server };
