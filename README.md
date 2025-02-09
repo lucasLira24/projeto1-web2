@@ -1,5 +1,5 @@
 # Sistemas de Informação
-![logoIF](https://github.com/user-attachments/assets/fffe6c6c-f0ad-4552-8d55-deee8dd6cede)
+<img src="https://github.com/user-attachments/assets/fffe6c6c-f0ad-4552-8d55-deee8dd6cede" alt="logoIF" width="300">
 
 Atividade avaliativa apresentada a disciplina de Projeto de Sistemas Web II
 ---
