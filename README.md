@@ -16,7 +16,7 @@ Atividade avaliativa apresentada a disciplina de Projeto de Sistemas Web II
 
 ## 📝 Objetivo <a id="objetivo"></a>
 
-Este projeto consiste em uma API para gerenciamento de laboratórios, incluindo funcionalidades como criação de laboratórios com upload de fotos e geração de relatórios em formato PDF. O sistema utiliza autenticação JWT, middlewares personalizados e um controle de acesso baseado em dias da semana.
+Este projeto consiste em uma API para gerenciamento de laboratórios, incluindo funcionalidades como criação de laboratórios com upload de fotos, geração de relatórios em formato PDF, monitoramento de temperatura, controle de iluminação e sistema de notificação para bloqueio de laboratórios em tempo real. O sistema utiliza autenticação JWT, middlewares personalizados e um controle de acesso baseado em dias da semana.
 
 ## 🤖 Funcionalidades <a id="funcionalidades"></a>
 
@@ -26,6 +26,10 @@ Este projeto consiste em uma API para gerenciamento de laboratórios, incluindo 
 - Controle de acesso baseado em dias da semana.
 - Upload de imagens utilizando Multer.
 - Testes automatizados para validar as funcionalidades.
+- Streaming de vídeo tutorial.
+- Notificação em tempo real sobre o bloqueio de laboratórios.
+- Monitoramento de temperatura de laboratórios usando simulador de hardware.
+- Controle de iluminação de laboratórios usando simulador de hardware.
 
 ---
 
@@ -35,6 +39,7 @@ Este projeto consiste em uma API para gerenciamento de laboratórios, incluindo 
 - **MongoDB**: Banco de dados NoSQL.
 - **JWT (Json Web Token)**: Para autenticação e controle de sessões.
 - **Axios**: Cliente HTTP para requisições.
+- **Socket.io**: Biblioteca para comunicação em tempo real.
 
 ---
 
@@ -75,6 +80,19 @@ https://projeto1-web2.vercel.app/api/laboratorio/relatorio
 
 Criar laboratório:
 https://projeto1-web2.vercel.app/api/laboratorio/novo
+
+Vídeo Tutorial: https://projeto1-web2.vercel.app/api/videoTutorial
+
+Bloquear Laboratório: https://projeto1-web2.vercel.app/api/bloquear/:lab
+
+Registrar temperatura: https://projeto1-web2.vercel.app/api/temperatura?temp=
+
+Consultar temperatura: https://projeto1-web2.vercel.app/api/temperaturaAtual
+
+Ligar luz: https://projeto1-web2.vercel.app/api/ligarLuz
+
+Verificar status da luz (ligada ou desligada):
+https://projeto1-web2.vercel.app/api/obterStatusLuz
 
 ## 🔎 Testes Automatizados <a id="testes"></a>
 
