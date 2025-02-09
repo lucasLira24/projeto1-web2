@@ -16,7 +16,7 @@
             "dest": "/public/index.html"
         },
         {
-            "src": "/api/ligarLuz",
+            "src": "/api/bloquearLab",
             "dest": "/public/bloquearLab.html"
         },
         {
