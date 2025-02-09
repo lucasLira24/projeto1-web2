@@ -12,11 +12,15 @@
     ],
     "routes":[
         {
-            "src": "/(.*)",
-            "dest": "/public/$1"
+            "src": "/api/temperaturaAtual",
+            "dest": "/public/index.html"
         },
         {
-            "src": "/(.*)",
+            "src": "/api/bloquearLab",
+            "dest": "/public/bloquearLab.html"
+        },
+        {
+            "src": "/api(.*)",
             "dest": "/server.js"
         }
     ]
