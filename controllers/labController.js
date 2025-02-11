@@ -202,7 +202,7 @@ exports.bloquearLaboratorio = async (req, res) => {
         .json({ message: `Laboratório "${lab}" não encontrado.` });
     }
 
-    io.emit("bloquearLab", `Laboratório ${lab} bloqueado`);
+    io.emit("bloquearLab", `${lab} bloqueado`);
     res.status(200).json({ message: `Bloqueio do ${lab} notificado.` });
   } catch (error) {
     console.error("Erro ao bloquear laboratório:", error);

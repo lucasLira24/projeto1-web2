@@ -12,10 +12,6 @@
     ],
     "routes":[
         {
-            "src": "/api/temperaturaAtual",
-            "dest": "/public/index.html"
-        },
-        {
             "src": "/api/bloquearLab",
             "dest": "/public/bloquearLab.html"
         },
